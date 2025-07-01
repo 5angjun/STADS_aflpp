@@ -1088,7 +1088,7 @@ void show_stats_normal(afl_state_t *afl) {
   //SAYF("    map density : %s%-19s" bSTG bV "\n",
   static long double good_turing = 0;
   SAYF("    good_turing : %Le" bSTG bV "\n",
-       (long double)(singletons/afl->fsrv.total_execs),
+       (long double)((long double)singletons/(long double)afl->fsrv.total_execs),
        tmp);
 
   sprintf(tmp, "%s (%0.02f%%)", u_stringify_int(IB(0), afl->cur_skipped_items),
