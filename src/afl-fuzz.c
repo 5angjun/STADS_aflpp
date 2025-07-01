@@ -2863,10 +2863,10 @@ int main(int argc, char **argv_orig, char **envp) {
 
       skipped_fuzz = fuzz_one(afl);
   //#ifdef INTROSPECTION
-      //++afl->queue_cur->stats_selected;
+      
 
       if (!skipped_fuzz){
-
+        ++afl->queue_cur->stats_selected;
         if (unlikely(afl->queued_items > prev_queued_items)) {
 
           afl->queue_cur->stats_finds += afl->queued_items - prev_queued_items;
