@@ -341,7 +341,8 @@ void write_stats_file(afl_state_t *afl, u32 t_bytes, double bitmap_cvg,
     if(hits==1)
     {
       singletons++;
-      afl->queue_buf[id]->mother->singleton_finds++;
+      if(afl->queue_buf[id]->mother)
+        afl->queue_buf[id]->mother->singleton_finds++;
     }
       
   }
@@ -681,7 +682,8 @@ void show_stats_normal(afl_state_t *afl) {
     if(hits==1)
     {
       singletons++;
-      afl->queue_buf[id]->mother->singleton_finds++;
+      if(afl->queue_buf[id]->mother)
+        afl->queue_buf[id]->mother->singleton_finds++;
     }
       
   }
