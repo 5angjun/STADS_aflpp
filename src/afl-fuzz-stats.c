@@ -330,7 +330,7 @@ void write_stats_file(afl_state_t *afl, u32 t_bytes, double bitmap_cvg,
 
   // initialize singleton_finds to 0
   for (id = 0; id < afl->queued_items; ++id) {
-    afl->queue_buf[id]->mother->singleton_finds = 0;
+    afl->queue_buf[id]->singleton_finds = 0;
   }
   // COUNT SINGLETONS
   for (id = 0; id < afl->queued_items; ++id) {
@@ -670,7 +670,7 @@ void show_stats_normal(afl_state_t *afl) {
 
   // initialize singleton_finds to 0
   for (id = 0; id < afl->queued_items; ++id) {
-    afl->queue_buf[id]->mother->singleton_finds = 0;
+    afl->queue_buf[id]->singleton_finds = 0;
   }
   // COUNT SINGLETONS
   for (id = 0; id < afl->queued_items; ++id) {
