@@ -330,7 +330,7 @@ void write_stats_file(afl_state_t *afl, u32 t_bytes, double bitmap_cvg,
 
   // initialize singleton_finds to 0
   for (id = 0; id < afl->queued_items; ++id) {
-    q->mother->singleton_finds = 0;
+    afl->queue_buf[id]->mother->singleton_finds = 0;
   }
   // COUNT SINGLETONS
   for (id = 0; id < afl->queued_items; ++id) {
@@ -341,7 +341,7 @@ void write_stats_file(afl_state_t *afl, u32 t_bytes, double bitmap_cvg,
     if(hits==1)
     {
       singletons++;
-      q->mother->singleton_finds++;
+      afl->queue_buf[id]->mother->singleton_finds++;
     }
       
   }
@@ -670,7 +670,7 @@ void show_stats_normal(afl_state_t *afl) {
 
   // initialize singleton_finds to 0
   for (id = 0; id < afl->queued_items; ++id) {
-    q->mother->singleton_finds = 0;
+    afl->queue_buf[id]->mother->singleton_finds = 0;
   }
   // COUNT SINGLETONS
   for (id = 0; id < afl->queued_items; ++id) {
@@ -681,7 +681,7 @@ void show_stats_normal(afl_state_t *afl) {
     if(hits==1)
     {
       singletons++;
-      q->mother->singleton_finds++;
+      afl->queue_buf[id]->mother->singleton_finds++;
     }
       
   }
