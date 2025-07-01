@@ -1085,10 +1085,10 @@ void show_stats_normal(afl_state_t *afl) {
           ((double)afl->queue_cur->bitmap_size) * 100 / afl->fsrv.real_map_size,
           t_byte_ratio);
 
-  SAYF("    map density : %s%-19s" bSTG bV "\n",
-       t_byte_ratio > 70
-           ? cLRD
-           : ((t_bytes < 200 && !afl->non_instrumented_mode) ? cPIN : cRST),
+  //SAYF("    map density : %s%-19s" bSTG bV "\n",
+  static long double good_turing = 0;
+  SAYF("    good_turing : %Le" bSTG bV "\n",
+       (long double)(singletons/afl->fsrv.total_execs),
        tmp);
 
   sprintf(tmp, "%s (%0.02f%%)", u_stringify_int(IB(0), afl->cur_skipped_items),
