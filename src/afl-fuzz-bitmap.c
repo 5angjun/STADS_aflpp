@@ -485,7 +485,7 @@ save_if_interesting(afl_state_t *afl, void *mem, u32 len, u8 fault) {
 
   /* Generating a hash on every input is super expensive. Bad idea and should
      only be used for special schedules */
-  if (likely(afl->schedule >= FAST && afl->schedule <= RARE)) {
+  // if (likely(afl->schedule >= FAST && afl->schedule <= RARE)) {
 
     classify_counts(&afl->fsrv);
     classified = 1;
@@ -497,7 +497,7 @@ save_if_interesting(afl_state_t *afl, void *mem, u32 len, u8 fault) {
     if (likely(afl->n_fuzz[cksum % N_FUZZ_SIZE] < 0xFFFFFFFF))
       afl->n_fuzz[cksum % N_FUZZ_SIZE]++;
 
-  }
+  // }
 
   if (likely(fault == afl->crash_mode)) {
 

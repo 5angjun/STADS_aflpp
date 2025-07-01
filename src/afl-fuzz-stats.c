@@ -325,8 +325,20 @@ void write_stats_file(afl_state_t *afl, u32 t_bytes, double bitmap_cvg,
   u64 overhead_ms = (afl->calibration_time_us + afl->sync_time_us + afl->trim_time_us) / 1000;
   if (!runtime_ms) { runtime_ms = 1; }
 
+  u32 id;
+  u32 singletons = 0;
+  for (id = 0; id < afl->queued_items; ++id) {
+
+    struct queue_entry *q = afl->queue_buf[id];
+    u32 hits = afl->n_fuzz[q->n_fuzz_entry];
+
+    if(hits==1)
+      singletons++;
+  }
+
   fprintf(
       f,
+      "singletons        : %u\n"
       "start_time        : %llu\n"
       "last_update       : %llu\n"
       "run_time          : %llu\n"
@@ -375,6 +387,7 @@ void write_stats_file(afl_state_t *afl, u32 t_bytes, double bitmap_cvg,
       "\n"
       "target_mode       : %s%s%s%s%s%s%s%s%s%s\n"
       "command_line      : %s\n",
+      singletons,
       (afl->start_time /*- afl->prev_run_time*/) / 1000, cur_time / 1000,
       runtime_ms / 1000, (u32)getpid(),
       afl->queue_cycle ? (afl->queue_cycle - 1) : 0, afl->cycles_wo_finds,
@@ -615,6 +628,19 @@ void show_stats(afl_state_t *afl) {
 
 void show_stats_normal(afl_state_t *afl) {
 
+
+
+  u32 id;
+  u32 singletons = 0;
+  for (id = 0; id < afl->queued_items; ++id) {
+
+    struct queue_entry *q = afl->queue_buf[id];
+    u32 hits = afl->n_fuzz[q->n_fuzz_entry];
+
+    if(hits==1)
+      singletons++;
+  }
+  
   double t_byte_ratio, stab_ratio;
 
   u64 cur_ms;
@@ -1019,8 +1045,8 @@ void show_stats_normal(afl_state_t *afl) {
 
   }
 
-  SAYF(bSTG bV bSTOP " corpus count : " cRST "%-5s " bSTG bV "\n",
-       u_stringify_int(IB(0), afl->queued_items));
+  SAYF(bSTG bV bSTOP " singletons / corpus count : " cRST "%-5s %-5s " bSTG bV "\n",
+       u_stringify_int(IB(0), singletons), u_stringify_int(IB(0), afl->queued_items));
 
   /* Highlight crashes in red if found, denote going over the KEEP_UNIQUE_CRASH
      limit with a '+' appended to the count. */

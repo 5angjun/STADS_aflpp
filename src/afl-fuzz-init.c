@@ -940,12 +940,12 @@ void perform_dry_run(afl_state_t *afl) {
     res = calibrate_case(afl, q, use_mem, 0, 1);
 
     /* For AFLFast schedules we update the queue entry */
-    if (unlikely(afl->schedule >= FAST && afl->schedule <= RARE) &&
-        likely(q->exec_cksum)) {
+    // if (unlikely(afl->schedule >= FAST && afl->schedule <= RARE) &&
+    //     likely(q->exec_cksum)) {
 
       q->n_fuzz_entry = q->exec_cksum % N_FUZZ_SIZE;
 
-    }
+    // }
 
     if (afl->stop_soon) { return; }
 
