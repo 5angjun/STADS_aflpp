@@ -213,12 +213,14 @@ struct queue_entry {
       fs_redundant,                     /* Marked as redundant in the fs?   */
       is_ascii,                         /* Is the input just ascii text?    */
       disabled;                         /* Is disabled from fuzz selection  */
-
+  u32 singleton_finds;
+  u32 stats_finds;                      /* stats: # of saved finds          */
+  double select_prob;
   u32 bitmap_size,                      /* Number of bits set in bitmap     */
 #ifdef INTROSPECTION
       stats_selected,                   /* stats: how often selected        */
       stats_skipped,                    /* stats: how often skipped         */
-      stats_finds,                      /* stats: # of saved finds          */
+      //stats_finds,                      /* stats: # of saved finds          */
       stats_crashes,                    /* stats: # of saved crashes        */
       stats_tmouts,                     /* stats: # of saved timeouts       */
 #endif

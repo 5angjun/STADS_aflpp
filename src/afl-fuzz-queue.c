@@ -174,11 +174,11 @@ void create_alias_table(afl_state_t *afl) {
       // weight is always 0 for disabled entries
       if (unlikely(afl->queue_buf[i]->disabled)) {
 
-        P[i] = 0;
+        afl->queue_buf[i]->select_prob = P[i] = 0;
 
       } else {
 
-        P[i] = (afl->queue_buf[i]->weight * n) / sum;
+        afl->queue_buf[i]->select_prob = P[i] = (afl->queue_buf[i]->weight * n) / sum;
 
       }
 
@@ -204,11 +204,11 @@ void create_alias_table(afl_state_t *afl) {
       // perf_score is always 0 for disabled entries
       if (unlikely(afl->queue_buf[i]->disabled)) {
 
-        P[i] = 0;
+        afl->queue_buf[i]->select_prob = P[i] = 0;
 
       } else {
 
-        P[i] = (afl->queue_buf[i]->perf_score * n) / sum;
+        afl->queue_buf[i]->select_prob = P[i] = (afl->queue_buf[i]->perf_score * n) / sum;
 
       }
 

@@ -2862,14 +2862,10 @@ int main(int argc, char **argv_orig, char **envp) {
       }
 
       skipped_fuzz = fuzz_one(afl);
-  #ifdef INTROSPECTION
-      ++afl->queue_cur->stats_selected;
+  //#ifdef INTROSPECTION
+      //++afl->queue_cur->stats_selected;
 
-      if (unlikely(skipped_fuzz)) {
-
-        ++afl->queue_cur->stats_skipped;
-
-      } else {
+      if (!skipped_fuzz){
 
         if (unlikely(afl->queued_items > prev_queued_items)) {
 
@@ -2877,25 +2873,9 @@ int main(int argc, char **argv_orig, char **envp) {
           prev_queued_items = afl->queued_items;
 
         }
-
-        if (unlikely(afl->saved_crashes > prev_saved_crashes)) {
-
-          afl->queue_cur->stats_crashes +=
-              afl->saved_crashes - prev_saved_crashes;
-          prev_saved_crashes = afl->saved_crashes;
-
-        }
-
-        if (unlikely(afl->saved_tmouts > prev_saved_tmouts)) {
-
-          afl->queue_cur->stats_tmouts += afl->saved_tmouts - prev_saved_tmouts;
-          prev_saved_tmouts = afl->saved_tmouts;
-
-        }
-
       }
 
-  #endif
+  //#endif
 
       if (unlikely(!afl->stop_soon && exit_1)) { afl->stop_soon = 2; }
 

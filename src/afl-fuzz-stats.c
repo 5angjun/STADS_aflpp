@@ -327,13 +327,41 @@ void write_stats_file(afl_state_t *afl, u32 t_bytes, double bitmap_cvg,
 
   u32 id;
   u32 singletons = 0;
+
+  // initialize singleton_finds to 0
+  for (id = 0; id < afl->queued_items; ++id) {
+    q->mother->singleton_finds = 0;
+  }
+  // COUNT SINGLETONS
   for (id = 0; id < afl->queued_items; ++id) {
 
     struct queue_entry *q = afl->queue_buf[id];
     u32 hits = afl->n_fuzz[q->n_fuzz_entry];
 
     if(hits==1)
+    {
       singletons++;
+      q->mother->singleton_finds++;
+    }
+      
+  }
+  // Calculate Good-Turing estimate
+  long double new_good_turing = 0;
+
+  for (id = 0; id < afl->queued_items; ++id) {
+    if(afl->queue_buf[id]->stats_finds == 0)
+    {
+      new_good_turing += 1 * (long double)afl->queue_buf[id]->select_prob;
+    }
+    else if(afl->queue_buf[id]->singleton_finds == 0)
+    {
+      new_good_turing += (long double)afl->queue_buf[id]->select_prob * (1/(long double)(afl->queue_buf[id]->stats_finds + 2));
+    }
+    else
+    {
+      new_good_turing += (long double)afl->queue_buf[id]->select_prob * (1/(long double)(afl->queue_buf[id]->singleton_finds));
+    }
+
   }
 
   long double good_turing = 0;
@@ -343,6 +371,7 @@ void write_stats_file(afl_state_t *afl, u32 t_bytes, double bitmap_cvg,
       f,
       "singletons        : %u\n"
       "good_turing       : %Le\n"
+      "new_good_turing   : %Le\n"
       "start_time        : %llu\n"
       "last_update       : %llu\n"
       "run_time          : %llu\n"
@@ -393,6 +422,7 @@ void write_stats_file(afl_state_t *afl, u32 t_bytes, double bitmap_cvg,
       "command_line      : %s\n",
       singletons,
       good_turing,
+      new_good_turing,
       (afl->start_time /*- afl->prev_run_time*/) / 1000, cur_time / 1000,
       runtime_ms / 1000, (u32)getpid(),
       afl->queue_cycle ? (afl->queue_cycle - 1) : 0, afl->cycles_wo_finds,
@@ -637,15 +667,42 @@ void show_stats_normal(afl_state_t *afl) {
 
   u32 id;
   u32 singletons = 0;
+
+  // initialize singleton_finds to 0
+  for (id = 0; id < afl->queued_items; ++id) {
+    q->mother->singleton_finds = 0;
+  }
+  // COUNT SINGLETONS
   for (id = 0; id < afl->queued_items; ++id) {
 
     struct queue_entry *q = afl->queue_buf[id];
     u32 hits = afl->n_fuzz[q->n_fuzz_entry];
 
     if(hits==1)
+    {
       singletons++;
+      q->mother->singleton_finds++;
+    }
+      
   }
+  // Calculate Good-Turing estimate
+  long double new_good_turing = 0;
 
+  for (id = 0; id < afl->queued_items; ++id) {
+    if(afl->queue_buf[id]->stats_finds == 0)
+    {
+      new_good_turing += 1 * (long double)afl->queue_buf[id]->select_prob;
+    }
+    else if(afl->queue_buf[id]->singleton_finds == 0)
+    {
+      new_good_turing += (long double)afl->queue_buf[id]->select_prob * (1/(long double)(afl->queue_buf[id]->stats_finds + 2));
+    }
+    else
+    {
+      new_good_turing += (long double)afl->queue_buf[id]->select_prob * (1/(long double)(afl->queue_buf[id]->singleton_finds));
+    }
+
+  }
   double t_byte_ratio, stab_ratio;
 
   u64 cur_ms;
@@ -1101,10 +1158,9 @@ void show_stats_normal(afl_state_t *afl) {
 
   SAYF(bV bSTOP "  runs timed out : " cRST "%-18s " bSTG bV, tmp);
 
-  sprintf(tmp, "%0.02f bits/tuple", t_bytes ? (((double)t_bits) / t_bytes) : 0);
 
-  SAYF(bSTOP " count coverage : " cRST "%-19s" bSTG bV "\n", tmp);
 
+  SAYF(bSTOP " new good turing: " cRST "%Le" bSTG bV "\n", new_good_turing);
   SAYF(bVR bH bSTOP                                             cCYA
        " stage progress " bSTG bH10 bH5 bH2 bH2 bH2 bX bH bSTOP cCYA
        " findings in depth " bSTG bH10 bH5 bH2                  bVL "\n");
