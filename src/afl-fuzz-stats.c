@@ -640,7 +640,7 @@ void show_stats_normal(afl_state_t *afl) {
     if(hits==1)
       singletons++;
   }
-  
+
   double t_byte_ratio, stab_ratio;
 
   u64 cur_ms;
@@ -1045,8 +1045,8 @@ void show_stats_normal(afl_state_t *afl) {
 
   }
 
-  SAYF(bSTG bV bSTOP " singletons / corpus count : " cRST "%-5s %-5s " bSTG bV "\n",
-       u_stringify_int(IB(0), singletons), u_stringify_int(IB(0), afl->queued_items));
+  SAYF(bSTG bV bSTOP " singletons / corpus count : " cRST "%u %-5s " bSTG bV "\n",
+       singletons, u_stringify_int(IB(0), afl->queued_items));
 
   /* Highlight crashes in red if found, denote going over the KEEP_UNIQUE_CRASH
      limit with a '+' appended to the count. */
