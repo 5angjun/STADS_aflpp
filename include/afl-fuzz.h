@@ -215,10 +215,11 @@ struct queue_entry {
       disabled;                         /* Is disabled from fuzz selection  */
   u32 singleton_finds;
   u32 stats_finds;                      /* stats: # of saved finds          */
+  u32 stats_selected,                   /* stats: how often selected        */
   double select_prob;
   u32 bitmap_size,                      /* Number of bits set in bitmap     */
 #ifdef INTROSPECTION
-      stats_selected,                   /* stats: how often selected        */
+      //stats_selected,                   /* stats: how often selected        */
       stats_skipped,                    /* stats: how often skipped         */
       //stats_finds,                      /* stats: # of saved finds          */
       stats_crashes,                    /* stats: # of saved crashes        */
