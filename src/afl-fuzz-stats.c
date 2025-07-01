@@ -336,9 +336,13 @@ void write_stats_file(afl_state_t *afl, u32 t_bytes, double bitmap_cvg,
       singletons++;
   }
 
+  long double good_turing = 0;
+  good_turing = (long double)((long double)singletons/(long double)afl->fsrv.total_execs);
+
   fprintf(
       f,
       "singletons        : %u\n"
+      "good_turing       : %Le\n"
       "start_time        : %llu\n"
       "last_update       : %llu\n"
       "run_time          : %llu\n"
@@ -388,6 +392,7 @@ void write_stats_file(afl_state_t *afl, u32 t_bytes, double bitmap_cvg,
       "target_mode       : %s%s%s%s%s%s%s%s%s%s\n"
       "command_line      : %s\n",
       singletons,
+      good_turing,
       (afl->start_time /*- afl->prev_run_time*/) / 1000, cur_time / 1000,
       runtime_ms / 1000, (u32)getpid(),
       afl->queue_cycle ? (afl->queue_cycle - 1) : 0, afl->cycles_wo_finds,
@@ -1086,7 +1091,7 @@ void show_stats_normal(afl_state_t *afl) {
           t_byte_ratio);
 
   //SAYF("    map density : %s%-19s" bSTG bV "\n",
-  static long double good_turing = 0;
+  long double good_turing = 0;
   SAYF("    good_turing : %Le" bSTG bV "\n",
        (long double)((long double)singletons/(long double)afl->fsrv.total_execs),
        tmp);
