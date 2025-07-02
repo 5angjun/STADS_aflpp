@@ -1150,7 +1150,7 @@ common_fuzz_stuff(afl_state_t *afl, u8 *out_buf, u32 len) {
     return 0;
 
   }
-
+  afl->queue_cur->good_turing_fuzzed++;
   fault = fuzz_run_target(afl, &afl->fsrv, afl->fsrv.exec_tmout);
 
   if (afl->stop_soon) { return 1; }
