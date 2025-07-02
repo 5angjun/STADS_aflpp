@@ -691,18 +691,13 @@ void show_stats_normal(afl_state_t *afl) {
   long double new_good_turing = 0;
 
   for (id = 0; id < afl->queued_items; ++id) {
-    if(afl->queue_buf[id]->stats_finds == 0)
-    {
+    if(afl->queue_buf[id]->good_turing_fuzzed == 0)
       new_good_turing += 1 * (long double)afl->queue_buf[id]->select_prob;
-    }
     else if(afl->queue_buf[id]->singleton_finds == 0)
-    {
       new_good_turing += (long double)afl->queue_buf[id]->select_prob * (1/(long double)(afl->queue_buf[id]->good_turing_fuzzed + 2));
-    }
     else
-    {
       new_good_turing += (long double)afl->queue_buf[id]->select_prob * (afl->queue_buf[id]->singleton_finds/(long double)(afl->queue_buf[id]->good_turing_fuzzed));
-    }
+    
 
   }
   double t_byte_ratio, stab_ratio;

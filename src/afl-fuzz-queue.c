@@ -314,7 +314,7 @@ void create_alias_table(afl_state_t *afl) {
     }
 
     afl->queue_buf[i]->select_prob = p;
-    fprintf(stderr, "seed %d (file: %s): %.8f\n", i, afl->queue_buf[i]->fname, p);
+    //fprintf(stderr, "seed %d (file: %s): %.8f\n", i, afl->queue_buf[i]->fname, p);
   }
 
 }
