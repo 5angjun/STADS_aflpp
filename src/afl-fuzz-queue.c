@@ -313,7 +313,7 @@ void create_alias_table(afl_state_t *afl) {
         p += (1.0 - afl->alias_probability[j]) / n;
       }
     }
-    //fprintf(stderr, "seed %d (file: %s): %.8f\n", i, afl->queue_buf[i]->fname, p);
+    fprintf(stderr, "seed %d (file: %s): %.8f\n", i, afl->queue_buf[i]->fname, p);
     afl->queue_buf[i]->select_prob = p;
   }
 }
