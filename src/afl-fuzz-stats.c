@@ -697,11 +697,11 @@ void show_stats_normal(afl_state_t *afl) {
     }
     else if(afl->queue_buf[id]->singleton_finds == 0)
     {
-      new_good_turing += (long double)afl->queue_buf[id]->select_prob * (1/(long double)(afl->queue_buf[id]->stats_finds + 2));
+      new_good_turing += (long double)afl->queue_buf[id]->select_prob * (1/(long double)(afl->queue_buf[id]->good_turing_fuzzed + 2));
     }
     else
     {
-      new_good_turing += (long double)afl->queue_buf[id]->select_prob * (1/(long double)(afl->queue_buf[id]->singleton_finds));
+      new_good_turing += (long double)afl->queue_buf[id]->select_prob * (afl->queue_buf[id]->singleton_finds/(long double)(afl->queue_buf[id]->good_turing_fuzzed));
     }
 
   }
